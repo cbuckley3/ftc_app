@@ -33,15 +33,13 @@ package com.qualcomm.ftcrobotcontroller.opmodes;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.Servo;
-import com.qualcomm.robotcore.util.Range;
 
 /**
  * TeleOp Mode
  * <p>
  * Enables control of the robot via the gamepad
  */
-public class TestBot extends OpMode {
+public class MecanumOp extends OpMode {
 
 	/*
 	 * Note: the configuration of the servos is such that
@@ -52,13 +50,17 @@ public class TestBot extends OpMode {
 
 	//here are the motor defs
 
-	DcMotor motorRight;
-	DcMotor motorLeft;
+	DcMotor frontRight;
+	DcMotor frontLeft;
+	DcMotor rearRight;
+	DcMotor rearLeft;
+
+	float y1, x1, x2;
 
 	/**
 	 * Constructor
 	 */
-	public TestBot() {
+	public MecanumOp() {
 
 	}
 
@@ -80,24 +82,27 @@ public class TestBot extends OpMode {
 		/*
 		 * For the demo Tetrix K9 bot we assume the following,
 		 *   There are two motors "motor_1" and "motor_2"
-		 *   "motor_1" is on the right side of the bot.
-		 *   "motor_2" is on the left side of the bot and reversed.
+		 *   "motor_1" is on the left side of the bot.
+		 *   "motor_2" is on the right side of the bot and reversed.
 		 *   
 		 * We also assume that there are two servos "servo_1" and "servo_6"
 		 *    "servo_1" controls the arm joint of the manipulator.
 		 *    "servo_6" controls the claw joint of the manipulator.
 		 */
-		motorRight = hardwareMap.dcMotor.get("motor_2");
-		motorLeft = hardwareMap.dcMotor.get("motor_1");
-		motorRight.setDirection(DcMotor.Direction.REVERSE);
+		frontLeft = hardwareMap.dcMotor.get("motor_1");
+		frontRight = hardwareMap.dcMotor.get("motor_2");
+		rearLeft = hardwareMap.dcMotor.get("motor_3");
+		rearRight = hardwareMap.dcMotor.get("motor_4");
 
-	}
+		frontRight.setDirection(DcMotor.Direction.REVERSE);
+		rearRight.setDirection(DcMotor.Direction.REVERSE);
 
 	/*
 	 * This method will be called repeatedly in a loop
 	 * 
 	 * @see com.qualcomm.robotcore.eventloop.opmode.OpMode#run()
 	 */
+	}
 	@Override
 	public void loop() {
 
@@ -112,17 +117,21 @@ public class TestBot extends OpMode {
 		// 1 is full down
 		// direction: left_stick_x ranges from -1 to 1, where -1 is full left
 		// and 1 is full right
-		float throttleLeft = gamepad1.left_stick_y;
-		float throttleRight = gamepad1.right_stick_y;
+		y1 = gamepad1.left_stick_y;
+		x1 = gamepad1.left_stick_x;
+		x2 = gamepad1.right_stick_x;
 
 		// scale the joystick value to make it easier to control
 		// the robot more precisely at slower speeds.
-		throttleRight = (float)scaleInput(throttleRight);
-		throttleLeft =  (float)scaleInput(throttleLeft);
+		y1 = (float)scaleInput(y1);
+		x1 = (float)scaleInput(x1);
+		x2 = (float)scaleInput(x2);
 		
 		// write the values to the motors
-		motorRight.setPower(throttleRight);
-		motorLeft.setPower(throttleLeft);
+			frontLeft.setPower(- y1 + x2 + x1);
+			rearLeft.setPower(-y1 + x2 - x1);
+			frontRight.setPower(-y1 - x2 - x1);
+			rearRight.setPower(-y1 - x2 + x1);
 
 
 		/*
