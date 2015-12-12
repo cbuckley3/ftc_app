@@ -50,7 +50,7 @@ public class Xenon extends OpMode {
 	DcMotor rearLeft;
 
 	//auxiliary motor declarations
-	DcMotor auxMotor1, auxMotor2, auxMotor3;
+	DcMotor auxMotor1, auxMotor2/*, auxMotor3*/; //auxMotor3 is disabled for now
 
 	//servo declarations
 	Servo servo1, servo2;
@@ -130,9 +130,9 @@ public class Xenon extends OpMode {
 		*/
 
 		//servo controls
-		if (gamepad2.dpad_down) servo1.setPosition(-1);
+		if (gamepad2.dpad_down) servo1.setPosition(0);
 		else if (gamepad2.dpad_up) servo1.setPosition(1);
-		else servo1.setPosition(0);
+		else servo1.setPosition(0.5);
 
 		//for the 180 degree servo, we first read the gamepad and increment the servo position variable accordingly
 		if (gamepad2.left_bumper) servo2Position -= servo2Delta;
