@@ -33,24 +33,36 @@ package com.qualcomm.ftcrobotcontroller.opmodes;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.util.Range;
 
 /**
  * TeleOp Mode
  * <p>
  * Enables control of the robot via the gamepad
  */
-public class SimpleQuadRover extends OpMode {
+public class Xenon extends OpMode {
 
+	//drive motor declarations
 	DcMotor frontRight;
 	DcMotor rearRight;
 	DcMotor frontLeft;
 	DcMotor rearLeft;
-	DcMotor armHinge;
+
+	//auxiliary motor declarations
+	DcMotor auxMotor1, auxMotor2, auxMotor3;
+
+	//servo declarations
+	Servo servo1, servo2;
+
+	//180 degree servo control variables
+	final double servo2Delta = 0.005;
+	double servo2Position = 0;
 
 	/**
 	 * Constructor
 	 */
-	public SimpleQuadRover() {
+	public Xenon() {
 
 	}
 
@@ -69,21 +81,19 @@ public class SimpleQuadRover extends OpMode {
 		 * configured your robot and created the configuration file.
 		 */
 
-		/*
-		 * For the demo Tetrix K9 bot we assume the following,
-		 *   There are two motors "motor_1" and "motor_2"
-		 *   "motor_1" is on the right side of the bot.
-		 *   "motor_2" is on the left side of the bot and reversed.
-		 *
-		 * We also assume that there are two servos "servo_1" and "servo_6"
-		 *    "servo_1" controls the arm joint of the manipulator.
-		 *    "servo_6" controls the claw joint of the manipulator.
-		 */
-		rearLeft = hardwareMap.dcMotor.get("motor_1");
-		rearRight = hardwareMap.dcMotor.get("motor_2");
-		frontLeft = hardwareMap.dcMotor.get("motor_3");
-		frontRight = hardwareMap.dcMotor.get("motor_4");
-        armHinge = hardwareMap.dcMotor.get("motor_5");
+		//drive motor definitions
+		rearLeft = hardwareMap.dcMotor.get("m1");
+		rearRight = hardwareMap.dcMotor.get("m2");
+		frontLeft = hardwareMap.dcMotor.get("m3");
+		frontRight = hardwareMap.dcMotor.get("m4");
+		//auxiliary motor definitions
+        auxMotor1 = hardwareMap.dcMotor.get("m5");
+		auxMotor2 = hardwareMap.dcMotor.get("m6");
+		auxMotor3 = hardwareMap.dcMotor.get("m7");
+
+		//servo definitions
+		servo1 = hardwareMap.servo.get("s1"); //servo 1 is a continuous rotation servo
+		servo2 = hardwareMap.servo.get("s2"); //servo 2 is a standard 180 degree servo
 
 	}
 
@@ -102,25 +112,40 @@ public class SimpleQuadRover extends OpMode {
 		 * wrist/claw via the a,b, x, y buttons
 		 */
 
-        if(gamepad1.a) armHinge.setPower(1);
-        else if(gamepad1.b) armHinge.setPower(-1);
-        else armHinge.setPower(0);
+		//aux motor controls
+        if (gamepad2.x) auxMotor1.setPower(-1);
+        else if (gamepad2.b) auxMotor1.setPower(1);
+        else auxMotor1.setPower(0);
 
-		// throttle: left_stick_y ranges from -1 to 1, where -1 is full up, and
-		// 1 is full down
-		// direction: left_stick_x ranges from -1 to 1, where -1 is full left
-		// and 1 is full right
+		if (gamepad2.y) auxMotor2.setPower(-1);
+		else if (gamepad2.a) auxMotor2.setPower(1);
+		else auxMotor2.setPower(0);
+
+		if (gamepad2.right_bumper) auxMotor3.setPower(-1);
+		else if (gamepad2.right_trigger > 0.35) auxMotor3.setPower(1);
+		else auxMotor3.setPower(0);
+
+		//servo controls
+		if (gamepad2.dpad_down) servo1.setPosition(-1);
+		else if (gamepad2.dpad_up) servo1.setPosition(1);
+		else servo1.setPosition(0);
+
+		//for the 180 degree servo, we first read the gamepad and increment the servo position variable accordingly
+		if (gamepad2.left_bumper) servo2Position -= servo2Delta;
+		else if (gamepad2.left_trigger > 0.35) servo2Position += servo2Delta;
+
+		//next, we assign the updated position value to the servo
+		servo2.setPosition(servo2Position);
+
+		//drive variable assignments
 		float majorThrottle = gamepad1.left_stick_y;
 		float pivotThrottle = gamepad1.right_stick_x;
-		//float right = throttle - direction;
-		//float left = throttle + direction;
 
 		// clip the right/left values so that the values never exceed +/- 1
-		//right = Range.clip(right, -1, 1);
-		//left = Range.clip(left, -1, 1);
+		majorThrottle = Range.clip(majorThrottle, -1, 1);
+		pivotThrottle = Range.clip(pivotThrottle, -1, 1);
 
-		// scale the joystick value to make it easier to control
-		// the robot more precisely at slower speeds.
+		// scale the joystick value to make it easier to control the robot more precisely at slower speeds.
 		majorThrottle = (float)scaleInput(majorThrottle);
 		pivotThrottle =  (float)scaleInput(pivotThrottle);
 
@@ -136,7 +161,8 @@ public class SimpleQuadRover extends OpMode {
 		 * will return a null value. The legacy NXT-compatible motor controllers
 		 * are currently write only.
 		 */
-		telemetry.addData("Text", "*** Robot Data...oh wait, there is no robot data...");
+		telemetry.addData("Text", "The Xenon's code was written by Connor and Max.");
+		telemetry.addData("Text", "No other data to report at this time.");
 
 	}
 
