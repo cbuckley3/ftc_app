@@ -128,7 +128,7 @@ public class Xenon extends OpMode {
 		else if (gamepad2.right_trigger > 0.35) auxMotor3.setPower(1);
 		else auxMotor3.setPower(0);
 		*/
-		
+
 		//servo controls
 		if (gamepad2.dpad_down) servo1.setPosition(-1);
 		else if (gamepad2.dpad_up) servo1.setPosition(1);
@@ -138,7 +138,10 @@ public class Xenon extends OpMode {
 		if (gamepad2.left_bumper) servo2Position -= servo2Delta;
 		else if (gamepad2.left_trigger > 0.35) servo2Position += servo2Delta;
 
-		//next, we assign the updated position value to the servo
+		//next, we clip the servo position values so that they stay inside the interval [0,1]
+		servo2Position = Range.clip(servo2Position, 0, 1);
+
+		//finally, we assign the updated position value to the servo
 		servo2.setPosition(servo2Position);
 
 		//drive variable assignments
