@@ -41,7 +41,7 @@ import com.qualcomm.robotcore.util.Range;
  * <p>
  * Enables control of the robot via the gamepad
  */
-public class Xenon extends OpMode {
+public class XenonSeven extends OpMode {
 
 	//drive motor declarations
 	DcMotor frontRight;
@@ -50,7 +50,7 @@ public class Xenon extends OpMode {
 	DcMotor rearLeft;
 
 	//auxiliary motor declarations
-	DcMotor auxMotor1, auxMotor2/*, auxMotor3*/;
+	DcMotor auxMotor1, auxMotor2, auxMotor3;
 
 	//servo declarations
 	Servo servo1, servo2;
@@ -62,7 +62,7 @@ public class Xenon extends OpMode {
 	/**
 	 * Constructor
 	 */
-	public Xenon() {
+	public XenonSeven() {
 
 	}
 
@@ -89,7 +89,7 @@ public class Xenon extends OpMode {
 		//auxiliary motor definitions
         auxMotor1 = hardwareMap.dcMotor.get("m5");
 		auxMotor2 = hardwareMap.dcMotor.get("m6");
-		/*auxMotor3 = hardwareMap.dcMotor.get("m7");*/
+		auxMotor3 = hardwareMap.dcMotor.get("m7");
 
 		//servo definitions
 		servo1 = hardwareMap.servo.get("s1"); //servo 1 is a continuous rotation servo
@@ -121,11 +121,9 @@ public class Xenon extends OpMode {
 		else if (gamepad2.a) auxMotor2.setPower(1);
 		else auxMotor2.setPower(0);
 
-		/*
 		if (gamepad2.right_bumper) auxMotor3.setPower(-1);
 		else if (gamepad2.right_trigger > 0.35) auxMotor3.setPower(1);
 		else auxMotor3.setPower(0);
-		*/
 
 		//servo controls
 		if (gamepad2.dpad_down) servo1.setPosition(0);

@@ -57,6 +57,7 @@ public class FtcOpModeRegister implements OpModeRegister {
 
     manager.register("QuadRover (Original)", QuadRover.class);
     manager.register("Xenon (Teleop)", Xenon.class);
+    manager.register("XenonSeven (Full-Motor Teleop)", XenonSeven.class);
 
     /*
      * Uncomment any of the following lines if you want to register an op mode.
