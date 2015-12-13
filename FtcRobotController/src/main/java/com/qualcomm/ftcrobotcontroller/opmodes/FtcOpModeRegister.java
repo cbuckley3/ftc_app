@@ -56,7 +56,6 @@ public class FtcOpModeRegister implements OpModeRegister {
      */
 
     manager.register("MecanumBot)", MecanumBot.class);
-    manager.register("Xenon (Teleop)", Xenon.class);
     manager.register("XenonSeven (Full-Motor Teleop)", XenonSeven.class);
 
     /*
