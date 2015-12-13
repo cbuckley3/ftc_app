@@ -59,6 +59,9 @@ public class XenonSeven extends OpMode {
 	final double servo2Delta = 0.005;
 	double servo2Position = 0;
 
+	//motor throttle variables
+	double majorThrottle, pivotThrottle, rightThrottle, leftThrottle;
+
 	/**
 	 * Constructor
 	 */
@@ -140,23 +143,27 @@ public class XenonSeven extends OpMode {
 		//finally, we assign the updated position value to the servo
 		servo2.setPosition(servo2Position);
 
-		//drive variable assignments
-		float majorThrottle = gamepad1.left_stick_y;
-		float pivotThrottle = gamepad1.right_stick_x;
+		//drive variable joystick assignments
+		majorThrottle = gamepad1.left_stick_y;
+		pivotThrottle = gamepad1.right_stick_x;
+
+		//create right and left composite throttle values
+		rightThrottle = majorThrottle + pivotThrottle;
+		leftThrottle = -(majorThrottle + pivotThrottle);
 
 		// clip the right/left values so that the values never exceed +/- 1
-		majorThrottle = Range.clip(majorThrottle, -1, 1);
-		pivotThrottle = Range.clip(pivotThrottle, -1, 1);
+		rightThrottle = Range.clip(rightThrottle, -1, 1);
+		leftThrottle = Range.clip(leftThrottle, -1, 1);
 
 		// scale the joystick value to make it easier to control the robot more precisely at slower speeds.
-		majorThrottle = (float)scaleInput(majorThrottle);
-		pivotThrottle =  (float)scaleInput(pivotThrottle);
+		rightThrottle = (float)scaleInput(rightThrottle);
+		leftThrottle =  (float)scaleInput(leftThrottle);
 
 		// write the values to the motors
-		frontRight.setPower(majorThrottle + pivotThrottle);
-		rearRight.setPower(majorThrottle + pivotThrottle);
-		frontLeft.setPower(-1 * majorThrottle + pivotThrottle);
-		rearLeft.setPower(-1 * majorThrottle + pivotThrottle);
+		frontRight.setPower(rightThrottle);
+		rearRight.setPower(rightThrottle);
+		frontLeft.setPower(leftThrottle);
+		rearLeft.setPower(leftThrottle);
 
 		/*
 		 * Send telemetry data back to driver station. Note that if we are using
@@ -164,8 +171,7 @@ public class XenonSeven extends OpMode {
 		 * will return a null value. The legacy NXT-compatible motor controllers
 		 * are currently write only.
 		 */
-		telemetry.addData("Text", "The Xenon's code was written by Connor and Max.");
-		telemetry.addData("Text", "No other data to report at this time.");
+		telemetry.addData("Text", "The Xenon's code was written by Connor and Max. No other data to report at this time.");
 
 	}
 
