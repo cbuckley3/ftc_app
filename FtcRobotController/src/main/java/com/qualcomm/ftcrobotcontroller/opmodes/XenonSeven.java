@@ -89,6 +89,10 @@ public class XenonSeven extends OpMode {
 		rearRight = hardwareMap.dcMotor.get("m2");
 		frontLeft = hardwareMap.dcMotor.get("m3");
 		frontRight = hardwareMap.dcMotor.get("m4");
+
+		frontRight.setDirection(DcMotor.Direction.REVERSE);
+		rearRight.setDirection(DcMotor.Direction.REVERSE);
+
 		//auxiliary motor definitions
         auxMotor1 = hardwareMap.dcMotor.get("m5");
 		auxMotor2 = hardwareMap.dcMotor.get("m6");
