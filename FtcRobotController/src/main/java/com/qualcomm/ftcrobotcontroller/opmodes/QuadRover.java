@@ -34,6 +34,7 @@ package com.qualcomm.ftcrobotcontroller.opmodes;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.util.Range;
 
 /**
  * TeleOp Mode
@@ -73,24 +74,16 @@ public class QuadRover extends OpMode {
 		 * configured your robot and created the configuration file.
 		 */
 
-		/*
-		 * For the demo Tetrix K9 bot we assume the following,
-		 *   There are two motors "motor_1" and "motor_2"
-		 *   "motor_1" is on the left side of the bot and reversed.
-		 *   "motor_2" is on the right side of the bot.
-		 *
-		 * We also assume that there are two servos "servo_1" and "servo_6"
-		 *    "servo_1" controls the arm joint of the manipulator.
-		 *    "servo_6" controls the claw joint of the manipulator.
-		 */
 		motorRight = hardwareMap.dcMotor.get("motor_2");
 		motorLeft = hardwareMap.dcMotor.get("motor_1");
         armHinge = hardwareMap.dcMotor.get("motor_5");
 		armPull = hardwareMap.dcMotor.get("motor_6");
+
 		motorLeft.setDirection(DcMotor.Direction.REVERSE);
 
 		scoopPivot = hardwareMap.servo.get("servo_1");
 		scoopHinge = hardwareMap.servo.get("servo_2");
+
         scoopPivot.setPosition(0.5);
 
 	}
@@ -118,18 +111,15 @@ public class QuadRover extends OpMode {
 		else if(gamepad2.a) armPull.setPower(-1);
 		else armPull.setPower(0);
 
-		// throttle: left_stick_y ranges from -1 to 1, where -1 is full up, and
-		// 1 is full down
-		// direction: left_stick_x ranges from -1 to 1, where -1 is full left
-		// and 1 is full right
+		//drive code
+
 		float throttleLeft = gamepad1.left_stick_y;
 		float throttleRight = gamepad1.right_stick_y;
-		//float right = throttle - direction;
-		//float left = throttle + direction;
 
 		// clip the right/left values so that the values never exceed +/- 1
-		//right = Range.clip(right, -1, 1);
-		//left = Range.clip(left, -1, 1);
+
+		throttleLeft = Range.clip(throttleLeft, -1, 1);
+		throttleRight = Range.clip(throttleRight, -1, 1);
 
 		// scale the joystick value to make it easier to control
 		// the robot more precisely at slower speeds.

@@ -41,7 +41,7 @@ import com.qualcomm.robotcore.util.Range;
  * <p>
  * Enables control of the robot via the gamepad
  */
-public class XenonSeven extends OpMode {
+public class FourWheelDrive extends OpMode {
 
 	//drive motor declarations
 	DcMotor frontRight;
@@ -65,7 +65,7 @@ public class XenonSeven extends OpMode {
 	/**
 	 * Constructor
 	 */
-	public XenonSeven() {
+	public FourWheelDrive() {
 
 	}
 
