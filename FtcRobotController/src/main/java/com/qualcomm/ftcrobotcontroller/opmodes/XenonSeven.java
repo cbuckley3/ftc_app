@@ -60,7 +60,7 @@ public class XenonSeven extends OpMode {
 	double servo2Position = 0;
 
 	//motor throttle variables
-	double majorThrottle, pivotThrottle, rightThrottle, leftThrottle;
+	double rightThrottle, leftThrottle;
 
 	/**
 	 * Constructor
@@ -89,6 +89,10 @@ public class XenonSeven extends OpMode {
 		rearRight = hardwareMap.dcMotor.get("m2");
 		frontLeft = hardwareMap.dcMotor.get("m3");
 		frontRight = hardwareMap.dcMotor.get("m4");
+
+		frontRight.setDirection(DcMotor.Direction.REVERSE);
+		rearRight.setDirection(DcMotor.Direction.REVERSE);
+
 		//auxiliary motor definitions
         auxMotor1 = hardwareMap.dcMotor.get("m5");
 		auxMotor2 = hardwareMap.dcMotor.get("m6");
@@ -144,14 +148,10 @@ public class XenonSeven extends OpMode {
 		servo2.setPosition(servo2Position);
 
 		//drive variable joystick assignments
-		majorThrottle = gamepad1.left_stick_y;
-		pivotThrottle = gamepad1.right_stick_x;
 
-		//create right and left composite throttle values
-		rightThrottle = majorThrottle + pivotThrottle;
-		leftThrottle = -(majorThrottle + pivotThrottle);
+		rightThrottle = gamepad1.right_stick_y;
+		leftThrottle = gamepad1.left_stick_y;
 
-		// clip the right/left values so that the values never exceed +/- 1
 		rightThrottle = Range.clip(rightThrottle, -1, 1);
 		leftThrottle = Range.clip(leftThrottle, -1, 1);
 
