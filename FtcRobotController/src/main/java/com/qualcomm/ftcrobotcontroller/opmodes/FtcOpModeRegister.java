@@ -57,6 +57,9 @@ public class FtcOpModeRegister implements OpModeRegister {
 
     manager.register("MecanumBot", MecanumBot.class);
     manager.register("XenonSeven (Full-Motor Teleop)", XenonSeven.class);
+    manager.register("Wheels!", Sarah.class);
+    manager.register("Winch 'n' Wheels", SarahTape.class);
+    manager.register("Winch, Wheels, 'n' More", SarahTapeServos.class);
 
     /*
      * Uncomment any of the following lines if you want to register an op mode.
