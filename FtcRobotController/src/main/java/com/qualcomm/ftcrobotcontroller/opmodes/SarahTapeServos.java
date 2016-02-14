@@ -97,6 +97,12 @@ public class SarahTapeServos extends OpMode {
 		winchExtension = hardwareMap.dcMotor.get("w1");
 		winchPivot = hardwareMap.dcMotor.get("w2");
 
+		//servo definitions
+		servo1 = hardwareMap.servo.get("s1");
+		servo2 = hardwareMap.servo.get("s2");
+		servo3 = hardwareMap.servo.get("s3");
+		servo4 = hardwareMap.servo.get("s4");
+
 	}
 
 	/*
@@ -115,8 +121,8 @@ public class SarahTapeServos extends OpMode {
 		 */
 
 		//winch motor controls
-        if (gamepad2.dpad_up) winchExtension.setPower(0.2);
-		else if (gamepad2.dpad_down) winchExtension.setPower(-0.2);
+        if (gamepad2.dpad_up) winchExtension.setPower(1);
+		else if (gamepad2.dpad_down) winchExtension.setPower(-1);
 		else winchExtension.setPower(0);
 
 		if (gamepad2.dpad_left) winchPivot.setPower(-0.15);
